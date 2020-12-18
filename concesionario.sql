@@ -570,40 +570,36 @@ INSERT INTO `ventas` (`ID_VENTA`, `ID_USUARIO`, `ID_VEHICULO`, `ID_CLIENTE`, `NU
 
 
 /*------------------CONSULTA 1--------------------*/
---Cuáles fueron los clientes 	que adquirieron un coche categoría JEEP
+--Mostrar los modelos vehículo que se vendieron desde Enero hasta mitad de año del 2020, adicional a que cliente se le fue otorgado
 
-SELECT vehiculo.ID_VEHICULO,
-cliente.NOMBRES_CLIENTE,
-cliente.APELLIDOS_CLIENTE,
-vehiculo.MODELO,
-categoria.NOMBRE_CATEGORIA
-FROM vehiculo
-INNER JOIN cliente on vehiculo.ID_CLIENTE=cliente.ID_CLIENTE
-INNER JOIN categoria on vehiculo.ID_CATEGORIA=categoria.ID_CATEGORIA
-WHERE categoria.NOMBRE_CATEGORIA= 'JEEP'
-
-/*------------------CONSULTA 2--------------------*/
---Consultar todos los modelos que se vendieron, la fecha en que fueron entregados y a que clientes se les otorgó
-
-SELECT cliente.ID_CLIENTE,
-cliente.NOMBRES_CLIENTE as 'NOMBRES',
-cliente.APELLIDOS_CLIENTE  as 'APELLIDOS',
+SELECT cliente.NOMBRES_CLIENTE as 'NOMBRES DE CLIENTE',
+cliente.APELLIDOS_CLIENTE as 'APELLIDOS DE CLIENTE',
 vehiculo.MODELO,
 ventas.FECHA_ENTREGA as 'FECHA DE ENTREGA'
 FROM ventas
 INNER JOIN cliente on ventas.ID_CLIENTE=cliente.ID_CLIENTE
 INNER JOIN vehiculo on ventas.ID_VEHICULO=vehiculo.ID_VEHICULO
+WHERE (ventas.FECHA_ENTREGA>='2020/01/01' and ventas.FECHA_ENTREGA='2020/06/30')
+ORDER BY ventas.FECHA_ENTREGA
+
+/*------------------CONSULTA 2--------------------*/
+--Mostrar la cantidad de ventas que han realizado cada uno de los usuario
+
+SELECT ventas.ID_VENTA as 'ID',
+usuario.NOMBRE as 'NOMBRE DEL VENDEDOR',
+COUNT(ventas.ID_USUARIO) as 'CANTIDAD DE VENTAS'
+FROM ventas
+INNER JOIN usuario on ventas.ID_USUARIO=usuario.ID_USUARIO
+GROUP BY ventas.ID_USUARIO
 
 /*------------------CONSULTA 3--------------------*/
---Consultar cuales son los vehículos usados y cuanto es su kilometraje
+--Consultar un promedio general de los clientes que residen en la ciudad de Manta.
 
-SELECT categoria.NOMBRE_CATEGORIA as 'CATEGORIA',
-vehiculo.MODELO as 'MODELO',
-vehiculo.KILOMETROS,
-vehiculo.TIPO_VEH as 'ESTADO VEHICULO'
-FROM vehiculo
-INNER JOIN categoria on vehiculo.ID_CATEGORIA=categoria.ID_CATEGORIA
-WHERE vehiculo.TIPO_VEH='USADO'
+SELECT detalletrabajo.CIUDAD, 
+COUNT(detalletrabajo.ID_CLIENTE) as 'CLIENTES',
+AVG (detalletrabajo.INGRESOS_TR) as 'PROMEDIO DE INGRESOS'
+FROM detalletrabajo 
+WHERE detalletrabajo.CIUDAD='Manta'
 
 /*------------------CONSULTA 4--------------------*/
 --Mostrar las ventas realizada por un usuario que tenga el cargo ´VENDEDORA´
