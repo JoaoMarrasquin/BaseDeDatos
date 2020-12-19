@@ -593,7 +593,7 @@ INNER JOIN usuario on ventas.ID_USUARIO=usuario.ID_USUARIO
 GROUP BY ventas.ID_USUARIO
 
 /*------------------CONSULTA 3--------------------*/
---Consultar un promedio general de los clientes que residen en la ciudad de Manta.
+--Consultar un promedio general del sueldo de los clientes que residen en la ciudad de Manta.
 
 SELECT detalletrabajo.CIUDAD, 
 COUNT(detalletrabajo.ID_CLIENTE) as 'CLIENTES',
